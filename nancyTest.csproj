@@ -6,9 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LiteDB.Core" Version="2.0.4" />
     <PackageReference Include="Nancy" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Nancy.hosting.self" Version="2.0.0-clinteastwood" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.109.2" />
   </ItemGroup>
 
 </Project>

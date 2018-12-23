@@ -27,12 +27,27 @@ namespace NancyStandalone
                 var index = FindClientAsset("index.html");
                 return Response.AsText(File.ReadAllText(index), "text/html");
             });
-
+            // Get("/", _ => Negotiate.WithView("abas")
+            //     .WithMediaRangeModel("image/jpeg", () => File.ReadAllBytes(@"1.jpg"))
+            //     .WithMediaRangeModel("image/png", () => File.OpenRead(@"1.png")));
+            Get("/abbas", parameters =>
+            {
+                var index = FindClientAsset("abas.html");
+                return Response.AsText(File.ReadAllText(index), "text/html");
+            });
             Get("/js/{file}", args =>
             {
                 var fileName = (string)args.file;
                 var filePath = FindClientAsset("js", fileName);
                 return Response.AsText(File.ReadAllText(filePath), "text/javascript");
+            });
+            Get("/img/{file}", args =>
+            {
+                var fileName = (string)args.file;
+                var filePath = FindClientAsset("img", fileName);
+                var streem = File.ReadAllBytes(filePath);
+                return Response.FromByteArray(streem, "image/jpeg");
+                //return Response.AsFile(File.ReadAllText(filePath),"image/jpeg");// .AsText(File.ReadAllText(filePath), "text/javascript");
             });
             Get("/css/{file}", args =>
             {
@@ -42,4 +57,5 @@ namespace NancyStandalone
             });
         }
     }
+
 }
