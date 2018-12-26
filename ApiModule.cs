@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+
 namespace NancyStandalone
 {
     public class ApiModule : NancyModule
@@ -15,31 +16,31 @@ namespace NancyStandalone
             // Versao
             Get("/version", parameters =>
             {
-                var model = new Versao() { Version = "1.0.0.0" };
+                var model = new Ver() { Version = "1.0.0.0" };
                 return Response.AsJson(model, HttpStatusCode.OK);
             });
             
-            #region Cliente
+            #region stock
 
             // 1 - Listar todos os clientes:
-            Get("/clients", parameters =>
+            Get("/stocks", parameters =>
             {
-                var model = DbManager.GetAllClients();
+                var model = DbManager.GetAllStocks();
                 return Response.AsJson(model);
             });
 
             // 2 - Obter os dados de um cliente específico:
-            Get("/clients/{id:int}", parameters =>
+            Get("/stocks/{id:int}", parameters =>
             {
-                var model = DbManager.GetClientById(parameters.id);
+                var model = DbManager.GetStockById(parameters.id);
                 return model;
             });
 
             // 3 - Cadastrar um novo cliente:
-            Post("/clients", parameters =>
+            Post("/stocks", parameters =>
             {
-                var model = ReadBodyObject<Cliente>();
-                var success = DbManager.SaveClient(model);
+                var model = ReadBodyObject<Stock>();
+                var success = DbManager.SaveStock(model);
                 if (success)
                 {
                     return HttpStatusCode.OK;
@@ -52,28 +53,28 @@ namespace NancyStandalone
 
             #endregion
 
-            #region Estabelecimento
+            #region Valuation
 
             // 4 - Listar todos os estabelecimentos:
-            Get("/establishments", parameters =>
+            Get("/valuations", parameters =>
             {
-                var model = DbManager.GetAllEstablishments();
+                var model = DbManager.GetAllValuations();
                 return Response.AsJson(model);
             });
 
             // 5 - Obter os dados de um cliente específico:
-            Get("/establishments/{id:int}", parameters =>
+            Get("/valuations/{id:int}", parameters =>
             {
-                var model = DbManager.GetEstablishmentById(parameters.id);
+                var model = DbManager.GetValuationById(parameters.id);
                 return model;
             });
 
             // 6 - Cadastrar um novo estabelecimento:
-            Post("/establishments", parameters =>
+            Post("/valuations", parameters =>
             {
-                var estabelecimento = ReadBodyObject<Estabelecimento>();
-                var model = BuscaEstabelecimento(estabelecimento.CNPJ);
-                var success = DbManager.SaveEstablishment(model);
+                var estabelecimento = ReadBodyObject<Valuation>();
+                var model = BuscaEstabelecimento("");
+                var success = DbManager.SaveValuation(model);
                 if (success)
                 {
                     return HttpStatusCode.OK;
@@ -86,45 +87,45 @@ namespace NancyStandalone
 
             #endregion
 
-            #region Pagamento
+            // #region Pagamento
 
-            // 7 - Fazer um pagamento:
-            Post("/payments", parameters =>
-            {
-                var model = ReadBodyObject<Pagamento>();
-                var success = DbManager.SavePayment(model);
-                if (success)
-                {
-                    return HttpStatusCode.OK;
-                }
-                else
-                {
-                    return HttpStatusCode.BadRequest;
-                }
-            });
+            // // 7 - Fazer um pagamento:
+            // Post("/payments", parameters =>
+            // {
+            //     var model = ReadBodyObject<Pagamento>();
+            //     var success = DbManager.SavePayment(model);
+            //     if (success)
+            //     {
+            //         return HttpStatusCode.OK;
+            //     }
+            //     else
+            //     {
+            //         return HttpStatusCode.BadRequest;
+            //     }
+            // });
 
-            // 8 - Cancelar um pagamento:
-            Delete("/payments/{id:int}", parameters =>
-            {
-                var success = DbManager.DeletePayment(parameters.id);
-                if (success)
-                {
-                    return HttpStatusCode.OK;
-                }
-                else
-                {
-                    return HttpStatusCode.BadRequest;
-                }
-            });
+            // // 8 - Cancelar um pagamento:
+            // Delete("/payments/{id:int}", parameters =>
+            // {
+            //     var success = DbManager.DeletePayment(parameters.id);
+            //     if (success)
+            //     {
+            //         return HttpStatusCode.OK;
+            //     }
+            //     else
+            //     {
+            //         return HttpStatusCode.BadRequest;
+            //     }
+            // });
 
-            // 9 - Listar todos os pagamentos de um estabelecimento:
-            Get("/payments/{id:int}", parameters =>
-            {
-                var model = DbManager.GetPaymentByIdEstablishment(parameters.id);
-                return model;
-            });
+            // // 9 - Listar todos os pagamentos de um estabelecimento:
+            // Get("/payments/{id:int}", parameters =>
+            // {
+            //     var model = DbManager.GetPaymentByIdEstablishment(parameters.id);
+            //     return model;
+            // });
 
-            #endregion
+            // #endregion
         }
 
         private T ReadBodyObject<T>()
@@ -137,19 +138,17 @@ namespace NancyStandalone
             return model;
         }
 
-        private Estabelecimento BuscaEstabelecimento(string cnpj)
+        private Valuation BuscaEstabelecimento(string cnpj)
         {
-            var client = new RestClient("https://www.receitaws.com.br");
-            var request = new RestRequest("/v1/cnpj/{cnpj}", Method.GET);
-            request.AddUrlSegment("cnpj", cnpj);
-            var response = client.Execute<ReceitaWs>(request);
+            // var client = new RestClient("https://www.receitaws.com.br");
+            // var request = new RestRequest("/v1/cnpj/{cnpj}", Method.GET);
+            // request.AddUrlSegment("cnpj", cnpj);
+            // var response = client.Execute<ReceitaWs>(request);
 
-            var estabelecimento = new Estabelecimento()
+            var estabelecimento = new Valuation()
             {
-                Nome = response.Data.nome,
-                CNPJ = response.Data.cnpj,
-                NaturezaJuridica = response.Data.natureza_juridica,
-                Situacao = response.Data.situacao,
+                Time = DateTime.Now,
+                Price = 5.6M
             };
 
             return estabelecimento;

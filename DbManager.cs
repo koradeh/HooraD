@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-namespace NancyStandalone
+namespace Nancy_Standalone
 {
     public static class DbManager
     {

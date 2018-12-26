@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using Nancy;
-using Nancy.Bootstrapper;
 using Nancy.ModelBinding;
-using Nancy.TinyIoc;
-using Nancy.ViewEngines.Razor;
 
 namespace NancyStandalone
 {

@@ -7,6 +7,7 @@
     using Nancy;
     using Nancy.Hosting.Self;
     using Nancy.ModelBinding;
+    using Nancy_Standalone;
 
     public static class Consts
     {
@@ -30,7 +31,7 @@
                 UrlReservations = new UrlReservations() { CreateAutomatically = true }
             };
                 
-            _nancy = new NancyHost(configuration, uri);
+            _nancy = new NancyHost(uri, new CustomBootstrapper(), configuration);
             //_nancy = new NancyHost(uri);
         }
 
